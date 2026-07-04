@@ -95,6 +95,10 @@ function looksLikeCoDesignShareText(text) {
  * @returns {{ name: string, url: string, password: string, prototypeId: string | null }}
  */
 function resolvePrototypeFormValues(sources) {
+  let name = normalizeShareText(sources.name || "");
+  let url = normalizeUrl(sources.url || "");
+  let password = normalizeShareText(sources.password || "");
+
   const candidates = [
     sources.pasteText,
     sources.url,
@@ -107,16 +111,18 @@ function resolvePrototypeFormValues(sources) {
     if (!looksLikeCoDesignShareText(text)) continue;
 
     const parsed = parseCoDesignShareText(text);
-    if (parsed?.url && parsed?.password) {
-      return parsed;
-    }
+    if (!parsed?.url || !parsed?.password) continue;
+
+    if (!name) name = parsed.name;
+    if (!url) url = parsed.url;
+    if (!password) password = parsed.password;
+    break;
   }
 
-  const url = normalizeUrl(sources.url || "");
   return {
-    name: normalizeShareText(sources.name || ""),
+    name,
     url,
-    password: normalizeShareText(sources.password || ""),
+    password,
     prototypeId: extractPrototypeId(url)
   };
 }
