@@ -1,0 +1,58 @@
+{
+  "name": {
+    "zh_CN": "CoDesign 原型库",
+    "en": "CoDesign Vault"
+  },
+  "short_name": {
+    "zh_CN": "CoDesign 原型库",
+    "en": "CoDesign Vault"
+  },
+  "description": {
+    "zh_CN": "专为国内设计团队打造：保存腾讯 CoDesign 原型分享链接与访问密码，打开分享页时自动完成验证；支持粘贴分享文本一键导入，告别反复输入密码。",
+    "en": "Save Tencent CoDesign prototype links and access passwords. Automatically applies credentials when opening shared previews. Paste share text to import in one click."
+  },
+  "version": "1.5.0",
+  "default_locale": "zh_CN",
+  "supported_locales": ["zh_CN", "en"],
+  "permissions_summary": {
+    "storage": {
+      "zh_CN": "在 Chrome 同步存储中本地保存原型名称、链接和访问密码。",
+      "en": "Save prototype names, links, and access passwords locally in Chrome sync storage."
+    },
+    "scripting": {
+      "zh_CN": "在你打开原型页面时，将已保存的访问凭证写入 codesign.qq.com。",
+      "en": "Inject saved access credentials into codesign.qq.com when you open a prototype."
+    },
+    "tabs": {
+      "zh_CN": "在新标签页中打开原型链接。",
+      "en": "Open prototype links in new browser tabs."
+    },
+    "webNavigation": {
+      "zh_CN": "检测 CoDesign 页面导航，以便尽早应用访问凭证。",
+      "en": "Detect CoDesign page navigation so credentials can be applied early."
+    },
+    "host_permissions": {
+      "zh_CN": "仅访问 codesign.qq.com，用于应用已保存的原型访问凭证。",
+      "en": "Access codesign.qq.com only, to apply saved prototype credentials."
+    }
+  },
+  "privacy": {
+    "data_collected": [],
+    "data_storage": {
+      "zh_CN": "所有原型数据均保存在本机 Chrome 同步存储中，不会发送至第三方服务器。",
+      "en": "All prototype data is stored locally in chrome.storage.sync. No data is sent to third-party servers."
+    },
+    "data_sharing": {
+      "zh_CN": "本扩展不收集、传输或出售用户数据。",
+      "en": "This extension does not collect, transmit, or sell user data."
+    }
+  },
+  "store_listing": {
+    "category": "Productivity",
+    "primary_language": "zh-CN",
+    "summary_zh": "专为国内团队设计：保存腾讯 CoDesign 原型分享链接，打开时自动应用访问密码，支持粘贴分享文本一键导入。",
+    "summary_en": "Save Tencent CoDesign prototype links and auto-apply access passwords. Paste share text to import in one click.",
+    "detailed_description_zh": "CoDesign 原型库是一款面向国内产品与设计团队的浏览器扩展。\n\n主要功能：\n• 保存 CoDesign 原型分享链接与访问密码\n• 打开分享页时自动完成密码验证，无需重复输入\n• 支持粘贴 CoDesign 分享文本，一键解析名称、链接和密码\n• 兼容 /s/ 与 /app/s/ 两种链接格式\n• 数据保存在 Chrome 同步存储，可在多设备间同步\n\n本扩展仅访问 codesign.qq.com，不收集或上传任何用户数据。",
+    "detailed_description_en": "CoDesign Vault helps product and design teams manage Tencent CoDesign prototype share links.\n\nFeatures:\n• Save prototype links and access passwords\n• Auto-apply credentials when opening shared previews\n• Paste CoDesign share text to import in one click\n• Supports both /s/ and /app/s/ URL formats\n• Data synced via Chrome sync storage across devices\n\nThis extension only accesses codesign.qq.com and does not collect or upload user data."
+  }
+}

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-i18n="optionsPageTitle">CoDesign Vault</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="page-header">
+        <div class="page-header-main">
+          <h1 data-i18n="extName">CoDesign Vault</h1>
+          <p data-i18n="optionsHeaderDesc"></p>
+        </div>
+        <button type="button" id="addBtn" class="primary-btn" data-i18n="addPrototype"></button>
+      </header>
+
+      <section class="card">
+        <div class="card-toolbar">
+          <div class="card-toolbar-left">
+            <h2 data-i18n="savedPrototypes"></h2>
+            <span id="countBadge" class="badge">0</span>
+          </div>
+        </div>
+
+        <div id="savedEmpty" class="empty-state">
+          <div class="empty-icon">📋</div>
+          <p class="empty-title" data-i18n="emptyTitle"></p>
+          <p class="empty-desc" data-i18n="emptyDesc"></p>
+          <button type="button" id="emptyAddBtn" class="primary-btn" data-i18n="addPrototype"></button>
+        </div>
+
+        <ul id="savedList" class="saved-list hidden"></ul>
+      </section>
+
+      <footer class="page-footer">
+        <p data-i18n="footerNote"></p>
+      </footer>
+    </div>
+
+    <div id="modal" class="modal hidden" aria-hidden="true">
+      <div class="modal-backdrop" data-close-modal></div>
+      <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <header class="modal-header">
+          <h2 id="modalTitle" data-i18n="modalAddTitle"></h2>
+          <button type="button" class="modal-close" data-close-modal data-i18n-aria="closeAria">×</button>
+        </header>
+
+        <form id="prototypeForm" class="modal-body" novalidate autocomplete="off">
+          <input type="hidden" id="editId" autocomplete="off" />
+
+          <div class="field-group">
+            <label for="pasteArea" data-i18n="quickPaste"></label>
+            <p class="field-hint" data-i18n="quickPasteHint"></p>
+            <textarea
+              id="pasteArea"
+              class="paste-area"
+              rows="4"
+              autocomplete="off"
+              autocapitalize="off"
+              autocorrect="off"
+              spellcheck="false"
+              data-i18n-placeholder="pastePlaceholder"
+            ></textarea>
+            <p id="parseStatus" class="parse-status hidden"></p>
+          </div>
+
+          <div class="field-group">
+            <label for="prototypeName" data-i18n="prototypeName"></label>
+            <input
+              id="prototypeName"
+              type="text"
+              autocomplete="off"
+              autocapitalize="off"
+              autocorrect="off"
+              spellcheck="false"
+              data-i18n-placeholder="prototypeNamePlaceholder"
+            />
+          </div>
+
+          <div class="field-group">
+            <label for="prototypeUrl" data-i18n="prototypeUrl"></label>
+            <input
+              id="prototypeUrl"
+              type="text"
+              autocomplete="off"
+              autocapitalize="off"
+              autocorrect="off"
+              spellcheck="false"
+              data-i18n-placeholder="prototypeUrlPlaceholder"
+            />
+          </div>
+
+          <div class="field-group">
+            <label for="accessCode" data-i18n="accessCode"></label>
+            <input
+              id="accessCode"
+              type="text"
+              autocomplete="new-password"
+              autocapitalize="off"
+              autocorrect="off"
+              spellcheck="false"
+              data-i18n-placeholder="accessCodePlaceholder"
+            />
+          </div>
+
+          <footer class="modal-footer">
+            <button type="button" class="ghost-btn" data-close-modal data-i18n="cancel"></button>
+            <button type="submit" class="primary-btn" id="submitBtn" data-i18n="save"></button>
+          </footer>
+        </form>
+      </div>
+    </div>
+
+    <script src="../shared/i18n.js"></script>
+    <script src="../shared/parse.js"></script>
+    <script src="../shared/storage.js"></script>
+    <script src="options.js"></script>
+  </body>
+</html>

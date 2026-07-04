@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-i18n="extName">CoDesign Vault</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div>
+        <h1 data-i18n="extName">CoDesign Vault</h1>
+        <p class="subtitle" data-i18n="popupSubtitle"></p>
+      </div>
+      <button
+        id="openOptions"
+        class="icon-btn"
+        data-i18n-title="managePrototypes"
+        data-i18n-aria="managePrototypes"
+      >
+        ⚙
+      </button>
+    </header>
+
+    <main>
+      <div id="emptyState" class="empty-state hidden">
+        <p class="empty-title" data-i18n="popupEmptyTitle"></p>
+        <p class="empty-desc" data-i18n="popupEmptyDesc"></p>
+        <button id="addFirst" class="primary-btn" data-i18n="addPrototype"></button>
+      </div>
+
+      <ul id="prototypeList" class="prototype-list"></ul>
+    </main>
+
+    <footer class="footer">
+      <button id="manageBtn" class="ghost-btn" data-i18n="manageAll"></button>
+    </footer>
+
+    <script src="../shared/i18n.js"></script>
+    <script src="../shared/parse.js"></script>
+    <script src="../shared/storage.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

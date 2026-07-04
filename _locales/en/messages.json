@@ -1,0 +1,140 @@
+{
+  "extName": {
+    "message": "CoDesign Vault"
+  },
+  "extShortName": {
+    "message": "CoDesign Vault"
+  },
+  "extDescription": {
+    "message": "Save Tencent CoDesign prototype links and access passwords. Automatically applies credentials when opening shared previews. Paste share text to import in one click."
+  },
+  "optionsPageTitle": {
+    "message": "CoDesign Vault - Manage Prototypes"
+  },
+  "optionsHeaderDesc": {
+    "message": "Manage CoDesign prototype share links and auto-apply access passwords—no more typing them every time."
+  },
+  "addPrototype": {
+    "message": "Add Prototype"
+  },
+  "savedPrototypes": {
+    "message": "Saved Prototypes"
+  },
+  "emptyTitle": {
+    "message": "No prototypes saved yet"
+  },
+  "emptyDesc": {
+    "message": "Click \"Add Prototype\" and paste a CoDesign share message to import quickly."
+  },
+  "footerNote": {
+    "message": "Data is stored in Chrome sync storage and used only for codesign.qq.com. Nothing is sent to third-party servers."
+  },
+  "modalAddTitle": {
+    "message": "Add Prototype"
+  },
+  "modalEditTitle": {
+    "message": "Edit Prototype"
+  },
+  "closeAria": {
+    "message": "Close"
+  },
+  "quickPaste": {
+    "message": "Quick Paste"
+  },
+  "quickPasteHint": {
+    "message": "Paste a CoDesign share message to auto-fill name, link, and password."
+  },
+  "pastePlaceholder": {
+    "message": "[CoDesign Share] Product Homepage v1\nhttps://codesign.qq.com/s/123456789012345\nPassword: XXXX"
+  },
+  "prototypeName": {
+    "message": "Prototype Name"
+  },
+  "prototypeNamePlaceholder": {
+    "message": "e.g. Product Homepage v1"
+  },
+  "prototypeUrl": {
+    "message": "Prototype Link"
+  },
+  "prototypeUrlPlaceholder": {
+    "message": "https://codesign.qq.com/s/123456789012345"
+  },
+  "accessCode": {
+    "message": "Access Password"
+  },
+  "accessCodePlaceholder": {
+    "message": "Enter access password"
+  },
+  "cancel": {
+    "message": "Cancel"
+  },
+  "save": {
+    "message": "Save"
+  },
+  "update": {
+    "message": "Update"
+  },
+  "open": {
+    "message": "Open"
+  },
+  "edit": {
+    "message": "Edit"
+  },
+  "delete": {
+    "message": "Delete"
+  },
+  "deleteConfirm": {
+    "message": "Delete \"$1\"?",
+    "placeholders": {
+      "1": {
+        "content": "$1"
+      }
+    }
+  },
+  "parseRecognized": {
+    "message": "Recognized: $1",
+    "placeholders": {
+      "1": {
+        "content": "$1"
+      }
+    }
+  },
+  "parseFailed": {
+    "message": "Could not parse share content. Please check the link format."
+  },
+  "parseNeedPassword": {
+    "message": "Link recognized. Please enter the access password."
+  },
+  "alertIncomplete": {
+    "message": "Please fill in name, link, and password, or paste a share message in Quick Paste."
+  },
+  "alertInvalidUrl": {
+    "message": "Invalid link. Use a codesign.qq.com /s/ or /app/s/ share URL."
+  },
+  "alertDuplicate": {
+    "message": "This prototype link already exists. Edit the existing entry instead."
+  },
+  "popupSubtitle": {
+    "message": "Quickly open saved prototypes"
+  },
+  "managePrototypes": {
+    "message": "Manage Prototypes"
+  },
+  "popupEmptyTitle": {
+    "message": "No prototypes yet"
+  },
+  "popupEmptyDesc": {
+    "message": "Add CoDesign share links to open them from here."
+  },
+  "manageAll": {
+    "message": "Manage All"
+  },
+  "defaultPrototypeName": {
+    "message": "Prototype $1",
+    "placeholders": {
+      "1": {
+        "content": "$1"
+      }
+    }
+  }
+}

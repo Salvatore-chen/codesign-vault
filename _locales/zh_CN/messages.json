@@ -1,0 +1,140 @@
+{
+  "extName": {
+    "message": "CoDesign 原型库"
+  },
+  "extShortName": {
+    "message": "CoDesign 原型库"
+  },
+  "extDescription": {
+    "message": "专为国内设计团队打造：保存腾讯 CoDesign 原型分享链接与访问密码，打开分享页时自动完成验证；支持粘贴分享文本一键导入，告别反复输入密码。"
+  },
+  "optionsPageTitle": {
+    "message": "CoDesign 原型库 - 管理原型"
+  },
+  "optionsHeaderDesc": {
+    "message": "集中管理 CoDesign 原型分享链接，打开页面时自动应用访问密码，无需每次手动输入。"
+  },
+  "addPrototype": {
+    "message": "添加原型"
+  },
+  "savedPrototypes": {
+    "message": "已保存的原型"
+  },
+  "emptyTitle": {
+    "message": "还没有保存任何原型"
+  },
+  "emptyDesc": {
+    "message": "点击右上角「添加原型」，粘贴 CoDesign 分享文本即可快速导入。"
+  },
+  "footerNote": {
+    "message": "数据保存在 Chrome 同步存储中，仅用于访问 codesign.qq.com，不会上传至第三方服务器。"
+  },
+  "modalAddTitle": {
+    "message": "添加原型"
+  },
+  "modalEditTitle": {
+    "message": "编辑原型"
+  },
+  "closeAria": {
+    "message": "关闭"
+  },
+  "quickPaste": {
+    "message": "快速粘贴"
+  },
+  "quickPasteHint": {
+    "message": "粘贴 CoDesign 分享文本，将自动识别名称、链接和密码。"
+  },
+  "pastePlaceholder": {
+    "message": "【CoDesign 原型分享】产品首页原型 v1\nhttps://codesign.qq.com/s/123456789012345\n密码: XXXX"
+  },
+  "prototypeName": {
+    "message": "原型名称"
+  },
+  "prototypeNamePlaceholder": {
+    "message": "例如：产品首页原型 v1"
+  },
+  "prototypeUrl": {
+    "message": "原型链接"
+  },
+  "prototypeUrlPlaceholder": {
+    "message": "https://codesign.qq.com/s/123456789012345"
+  },
+  "accessCode": {
+    "message": "访问密码"
+  },
+  "accessCodePlaceholder": {
+    "message": "请输入访问密码"
+  },
+  "cancel": {
+    "message": "取消"
+  },
+  "save": {
+    "message": "保存"
+  },
+  "update": {
+    "message": "更新"
+  },
+  "open": {
+    "message": "打开"
+  },
+  "edit": {
+    "message": "编辑"
+  },
+  "delete": {
+    "message": "删除"
+  },
+  "deleteConfirm": {
+    "message": "确定删除「$1」吗？",
+    "placeholders": {
+      "1": {
+        "content": "$1"
+      }
+    }
+  },
+  "parseRecognized": {
+    "message": "已识别：$1",
+    "placeholders": {
+      "1": {
+        "content": "$1"
+      }
+    }
+  },
+  "parseFailed": {
+    "message": "未能识别分享内容，请检查链接格式。"
+  },
+  "parseNeedPassword": {
+    "message": "已识别链接，请补充访问密码。"
+  },
+  "alertIncomplete": {
+    "message": "请完整填写名称、链接和密码，或在快速粘贴区域粘贴分享文本。"
+  },
+  "alertInvalidUrl": {
+    "message": "链接格式不正确，请使用 codesign.qq.com 的 /s/ 或 /app/s/ 分享链接。"
+  },
+  "alertDuplicate": {
+    "message": "该原型链接已经存在，请直接编辑现有条目。"
+  },
+  "popupSubtitle": {
+    "message": "快速打开已保存的原型"
+  },
+  "managePrototypes": {
+    "message": "管理原型"
+  },
+  "popupEmptyTitle": {
+    "message": "暂无原型"
+  },
+  "popupEmptyDesc": {
+    "message": "添加 CoDesign 分享链接后，可在此一键打开。"
+  },
+  "manageAll": {
+    "message": "管理全部"
+  },
+  "defaultPrototypeName": {
+    "message": "原型 $1",
+    "placeholders": {
+      "1": {
+        "content": "$1"
+      }
+    }
+  }
+}

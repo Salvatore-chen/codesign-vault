@@ -1,0 +1,9 @@
+{
+  "name": "codesign-vault",
+  "version": "1.5.0",
+  "private": true,
+  "description": "CoDesign Vault Chrome Extension",
+  "scripts": {
+    "build": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build.ps1"
+  }
+}
