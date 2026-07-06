@@ -123,7 +123,34 @@ dist/
 2. **加载已解压的扩展程序** → 选择 `dist/` 文件夹
 3. 验证弹窗、配置页、打开原型、导入/导出功能
 
-## Chrome 网上应用店发布
+## GitHub Release（自动化）
+
+仓库已配置 `.github/workflows/release.yml`：推送 `v*` 标签时自动打包并创建 Release，上传 `codesign-vault-v{version}.zip`。
+
+### 发版步骤
+
+1. 更新 `manifest.json`（及 `package.json`）中的版本号
+2. 提交并推送到 `master`
+3. 创建并推送 tag（版本号需与 manifest 一致）：
+
+   ```bash
+   git tag v1.6.0
+   git push origin v1.6.0
+   ```
+
+4. 在 GitHub **Actions** 页查看构建进度
+5. 完成后在 [Releases](https://github.com/Salvatore-chen/codesign-vault/releases) 下载 zip
+
+### 本地手动发版（可选）
+
+若未使用 CI，也可本地 build 后手动创建 Release：
+
+```powershell
+npm run build
+gh release create v1.6.0 dist/codesign-vault-v1.6.0.zip --title "v1.6.0" --generate-notes
+```
+
+## Chrome 网上应用店发布（可选）
 
 1. 执行 `npm run build` 生成 zip
 2. 打开 [Chrome 开发者控制台](https://chrome.google.com/webstore/devconsole)

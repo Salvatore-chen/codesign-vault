@@ -1,0 +1,40 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build extension
+        shell: pwsh
+        run: ./scripts/build.ps1
+
+      - name: Verify zip artifact
+        shell: pwsh
+        run: |
+          $version = (Get-Content manifest.json -Raw | ConvertFrom-Json).version
+          $tagVersion = "${{ github.ref_name }}".TrimStart("v")
+          if ($version -ne $tagVersion) {
+            throw "Tag version ($tagVersion) does not match manifest.json ($version)"
+          }
+          $zip = "dist/codesign-vault-v$version.zip"
+          if (-not (Test-Path $zip)) {
+            throw "Expected zip not found: $zip"
+          }
+          Write-Host "Release artifact: $zip"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/codesign-vault-v*.zip
+          generate_release_notes: true
