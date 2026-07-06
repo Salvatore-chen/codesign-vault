@@ -30,5 +30,11 @@ jobs:
       - name: Push to Gitee
         run: |
           git remote add gitee git@gitee.com:zhang-yunrui/codesign-vault.git
+
+          # Tag push checks out detached HEAD; fetch master before pushing branch ref.
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            git fetch origin master:refs/heads/master
+          fi
+
           git push gitee refs/heads/master:refs/heads/master
           git push gitee --tags

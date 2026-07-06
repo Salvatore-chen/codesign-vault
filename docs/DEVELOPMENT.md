@@ -169,7 +169,7 @@ ssh-keygen -t ed25519 -C "github-actions-gitee-sync" -f gitee_sync_key -N ""
 git push origin master          # → 触发 sync-gitee，同步 master 到 Gitee
 git tag v1.7.0 && git push origin v1.7.0
 # → 触发 release.yml（GitHub + Gitee Release）
-# → 触发 sync-gitee.yml（同步 tag）
+# → 触发 sync-gitee.yml（fetch master 后同步分支与 tags）
 ```
 
 ### 本地手动推送到 Gitee（可选）
