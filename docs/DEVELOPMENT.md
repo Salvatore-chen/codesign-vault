@@ -143,25 +143,14 @@ GitHub 为主仓库，Gitee 为国内镜像：
 
 在 GitHub 仓库 **Settings → Secrets and variables → Actions** 中添加：
 
-#### 1. `GITEE_SSH_PRIVATE_KEY`（代码同步，必填）
+#### `GITEE_TOKEN`（必填）
 
-用于 `sync-gitee.yml` 推送代码到 Gitee。
+用于 `sync-gitee.yml` 推送代码/tags，以及 `release.yml` 在 Gitee 创建 Release 并上传 zip。
 
-```bash
-# 本地生成专用密钥（不要覆盖已有 ~/.ssh/id_ed25519）
-ssh-keygen -t ed25519 -C "github-actions-gitee-sync" -f gitee_sync_key -N ""
-```
-
-1. 复制公钥 `gitee_sync_key.pub` 内容
-2. 打开 Gitee 仓库 → **管理** → **部署公钥设置** → 添加公钥（勾选**允许推送**）
-3. 复制私钥 `gitee_sync_key` 全部内容，粘贴到 GitHub Secret `GITEE_SSH_PRIVATE_KEY`
-
-#### 2. `GITEE_TOKEN`（Release 附件上传，推荐）
-
-用于 `release.yml` 在 Gitee 创建 Release 并上传 zip。
-
-1. Gitee → **设置** → **私人令牌** → 生成令牌（勾选 `projects` 权限）
+1. Gitee → **设置** → **私人令牌** → 生成令牌（勾选 `projects` 权限，需具备仓库读写能力）
 2. 粘贴到 GitHub Secret `GITEE_TOKEN`
+
+> **注意：** Gitee 的**部署公钥**默认只读，不能 push。若用 SSH 推送出现 `DeployKey does not support push code`，说明公钥加在了仓库部署公钥里；CI 已改用 HTTPS + `GITEE_TOKEN`，无需再配置 `GITEE_SSH_PRIVATE_KEY`。
 
 ### 发版后同步流程
 

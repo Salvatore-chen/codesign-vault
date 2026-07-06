@@ -16,20 +16,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Configure SSH
+      - name: Push to Gitee
+        env:
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
         run: |
-          if [ -z "${{ secrets.GITEE_SSH_PRIVATE_KEY }}" ]; then
-            echo "::error::GITEE_SSH_PRIVATE_KEY is not configured. See docs/DEVELOPMENT.md"
+          if [ -z "$GITEE_TOKEN" ]; then
+            echo "::error::GITEE_TOKEN is not configured. See docs/DEVELOPMENT.md"
             exit 1
           fi
-          mkdir -p ~/.ssh
-          echo "${{ secrets.GITEE_SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -t rsa,ecdsa,ed25519 gitee.com >> ~/.ssh/known_hosts
 
-      - name: Push to Gitee
-        run: |
-          git remote add gitee git@gitee.com:zhang-yunrui/codesign-vault.git
+          git remote add gitee "https://oauth2:${GITEE_TOKEN}@gitee.com/zhang-yunrui/codesign-vault.git"
 
           # Tag push checks out detached HEAD; fetch master before pushing branch ref.
           if [ "${{ github.ref_type }}" = "tag" ]; then
