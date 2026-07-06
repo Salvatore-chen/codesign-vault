@@ -129,6 +129,32 @@
   "manageAll": {
     "message": "Manage All"
   },
+  "exportData": {
+    "message": "Export"
+  },
+  "importData": {
+    "message": "Import"
+  },
+  "exportEmpty": {
+    "message": "No prototypes to export."
+  },
+  "importInvalid": {
+    "message": "Invalid file. Please import a JSON file exported from CoDesign Vault."
+  },
+  "importMergeConfirm": {
+    "message": "Found $1 prototype(s). Merge with existing data? (Duplicates by link will be overwritten)\n\nOK = Merge\nCancel = Replace mode"
+  },
+  "importReplaceConfirm": {
+    "message": "Replace all existing data with $1 imported prototype(s)? This cannot be undone."
+  },
+  "importSuccess": {
+    "message": "Successfully imported $1 prototype(s).",
+    "placeholders": {
+      "1": {
+        "content": "$1"
+      }
+    }
+  },
   "defaultPrototypeName": {
     "message": "Prototype $1",
     "placeholders": {

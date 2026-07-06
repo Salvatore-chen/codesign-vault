@@ -1,0 +1,162 @@
+# 开发文档 · Development Guide
+
+[简体中文 README](../README.md) · [English README](../README.en.md)
+
+本文档面向贡献者与维护者，涵盖项目结构、本地开发、打包构建与 Chrome 商店发布。
+
+---
+
+## 环境要求
+
+| 项目 | 要求 |
+|------|------|
+| 浏览器 | Google Chrome 109+ |
+| 操作系统 | 扩展本身跨平台；打包脚本为 PowerShell（Windows） |
+| Node.js | 可选，仅用于 `npm run build` 快捷命令 |
+
+## 项目结构
+
+```
+codesign-vault/
+├── manifest.json              # 扩展清单（版本号在此维护）
+├── background/
+│   └── service-worker.js      # 密码注入、打开链接、缓存同步
+├── content/
+│   └── content.js             # SPA 路由变化时通知 background
+├── popup/                     # 工具栏弹窗
+├── options/                   # 配置管理页（含导入/导出）
+├── shared/
+│   ├── i18n.js                # 国际化工具
+│   ├── parse.js               # 分享文本解析
+│   ├── storage.js             # chrome.storage.sync 读写
+│   └── import-export.js       # JSON 导入/导出
+├── _locales/
+│   ├── zh_CN/messages.json    # 简体中文
+│   └── en/messages.json       # English
+├── icons/                     # 16 / 48 / 128 图标
+├── scripts/build.ps1          # 打包脚本
+├── store/manifest.meta.json   # Chrome 商店文案参考（不打包进扩展）
+├── docs/DEVELOPMENT.md        # 本文档
+├── README.md                  # 用户文档（中文）
+└── README.en.md               # 用户文档（英文）
+```
+
+## 本地开发
+
+### 加载扩展
+
+1. 克隆仓库：
+
+   ```bash
+   git clone git@github.com:Salvatore-chen/codesign-vault.git
+   cd codesign-vault
+   ```
+
+2. 打开 `chrome://extensions/`，开启 **开发者模式**
+
+3. 点击 **加载已解压的扩展程序**，选择项目**根目录**（含 `manifest.json` 的目录）
+
+4. 修改代码后，在扩展管理页点击 **重新加载**
+
+> 日常开发直接加载源码目录即可，无需先执行 build。
+
+### 调试
+
+| 模块 | 调试方式 |
+|------|----------|
+| Options / Popup | 右键页面 → 检查 |
+| Background | 扩展管理页 → Service Worker → 检查 |
+| Content Script | 在 codesign.qq.com 页面 DevTools → Sources |
+
+### 修改文案（i18n）
+
+编辑 `_locales/zh_CN/messages.json` 与 `_locales/en/messages.json`，然后在扩展管理页重新加载。
+
+HTML 中使用 `data-i18n`、`data-i18n-placeholder` 等属性，由 `shared/i18n.js` 的 `applyI18n()` 填充。
+
+### 版本号
+
+在 `manifest.json` 的 `version` 字段维护，发版前同步更新 `package.json`。
+
+## 打包构建
+
+### 命令
+
+```powershell
+npm run build
+```
+
+或直接运行：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build.ps1
+```
+
+### 输出产物
+
+| 产物 | 路径 | 用途 |
+|------|------|------|
+| 发布目录 | `dist/` | 本地验证打包结果、加载测试 |
+| 商店 zip | `dist/codesign-vault-v{version}.zip` | 上传 Chrome Web Store |
+
+`dist/` 与 `*.zip` 已在 `.gitignore` 中忽略，**不要提交到 Git**。
+
+### 打包包含内容
+
+```
+dist/
+├── manifest.json
+├── _locales/
+├── background/
+├── content/
+├── icons/
+├── options/
+├── popup/
+└── shared/
+```
+
+**不包含**：`README.md`、`docs/`、`scripts/`、`store/`、`package.json`、`.gitignore`
+
+### 验证打包结果
+
+1. 在 `chrome://extensions/` 移除开发中的扩展
+2. **加载已解压的扩展程序** → 选择 `dist/` 文件夹
+3. 验证弹窗、配置页、打开原型、导入/导出功能
+
+## Chrome 网上应用店发布
+
+1. 执行 `npm run build` 生成 zip
+2. 打开 [Chrome 开发者控制台](https://chrome.google.com/webstore/devconsole)
+3. 上传 `dist/codesign-vault-v*.zip`
+4. 填写商店信息，文案参考 `store/manifest.meta.json`：
+   - 中英文描述
+   - 权限说明
+   - 截图（1280×800 或 640×400）
+5. 提供**隐私政策 URL**（扩展会存储访问密码）
+
+### zip 与本地安装的区别
+
+| 方式 | 说明 |
+|------|------|
+| 加载 `dist/` 文件夹 | 开发者模式，本地测试 |
+| 上传 zip 到商店 | 公开发布，用户从商店安装 |
+| 拖拽 zip 到浏览器 | ❌ Chrome 不支持 |
+
+## 核心机制
+
+CoDesign 分享页通过 `localStorage` 的 `secret_{prototypeId}` 读取访问密码。
+
+扩展在页面加载早期（`webNavigation.onCommitted` + content script 监听 SPA 路由）将已保存密码写入该键，避免页面 API 请求时尚未就绪导致「密码错误」。
+
+## 贡献流程
+
+1. Fork 仓库并创建分支
+2. 加载未打包扩展进行开发与测试
+3. 若改动了 i18n，同步更新 `zh_CN` 与 `en`
+4. 发版前更新 `manifest.json` 版本号并执行 `npm run build` 验证
+5. 提交 Pull Request
+
+## 相关链接
+
+- 仓库：https://github.com/Salvatore-chen/codesign-vault
+- License：[MIT](../LICENSE)

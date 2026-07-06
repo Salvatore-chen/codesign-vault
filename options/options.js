@@ -172,6 +172,53 @@ function renderSavedList(prototypes) {
 document.getElementById("addBtn").addEventListener("click", () => openModal("add"));
 document.getElementById("emptyAddBtn").addEventListener("click", () => openModal("add"));
 
+document.getElementById("exportBtn").addEventListener("click", async () => {
+  const prototypes = await getPrototypes();
+  if (!prototypes.length) {
+    alert(t("exportEmpty"));
+    return;
+  }
+  downloadExportFile(prototypes);
+});
+
+const importFileInput = document.getElementById("importFile");
+
+document.getElementById("importBtn").addEventListener("click", () => {
+  importFileInput.value = "";
+  importFileInput.click();
+});
+
+importFileInput.addEventListener("change", async () => {
+  const file = importFileInput.files?.[0];
+  if (!file) return;
+
+  let imported;
+  try {
+    imported = await readImportFile(file);
+  } catch {
+    alert(t("importInvalid"));
+    return;
+  }
+
+  const existing = await getPrototypes();
+  let next = imported;
+
+  if (existing.length) {
+    const merge = confirm(t("importMergeConfirm", String(imported.length)));
+    if (merge) {
+      next = mergePrototypes(existing, imported);
+    } else if (confirm(t("importReplaceConfirm", String(imported.length)))) {
+      next = imported;
+    } else {
+      return;
+    }
+  }
+
+  await savePrototypes(next);
+  renderSavedList(next);
+  alert(t("importSuccess", String(next.length)));
+});
+
 modal.querySelectorAll("[data-close-modal]").forEach((el) => {
   el.addEventListener("click", closeModal);
 });

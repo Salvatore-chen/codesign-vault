@@ -22,6 +22,11 @@
             <h2 data-i18n="savedPrototypes"></h2>
             <span id="countBadge" class="badge">0</span>
           </div>
+          <div class="card-toolbar-actions">
+            <button type="button" id="exportBtn" class="ghost-btn" data-i18n="exportData"></button>
+            <button type="button" id="importBtn" class="ghost-btn" data-i18n="importData"></button>
+            <input type="file" id="importFile" accept=".json,application/json" class="hidden" />
+          </div>
         </div>
 
         <div id="savedEmpty" class="empty-state">
@@ -116,6 +121,7 @@
     <script src="../shared/i18n.js"></script>
     <script src="../shared/parse.js"></script>
     <script src="../shared/storage.js"></script>
+    <script src="../shared/import-export.js"></script>
     <script src="options.js"></script>
   </body>
 </html>

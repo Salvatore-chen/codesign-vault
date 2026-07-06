@@ -129,6 +129,32 @@
   "manageAll": {
     "message": "管理全部"
   },
+  "exportData": {
+    "message": "导出"
+  },
+  "importData": {
+    "message": "导入"
+  },
+  "exportEmpty": {
+    "message": "没有可导出的原型数据。"
+  },
+  "importInvalid": {
+    "message": "文件格式无效，请导入 CoDesign Vault 导出的 JSON 文件。"
+  },
+  "importMergeConfirm": {
+    "message": "检测到 $1 条原型。是否与现有数据合并？（相同链接的原型会被覆盖）\n\n确定 = 合并\n取消 = 进入替换模式"
+  },
+  "importReplaceConfirm": {
+    "message": "是否用导入的 $1 条原型替换现有全部数据？此操作不可撤销。"
+  },
+  "importSuccess": {
+    "message": "已成功导入 $1 条原型。",
+    "placeholders": {
+      "1": {
+        "content": "$1"
+      }
+    }
+  },
   "defaultPrototypeName": {
     "message": "原型 $1",
     "placeholders": {
