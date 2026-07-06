@@ -38,3 +38,40 @@ jobs:
         with:
           files: dist/codesign-vault-v*.zip
           generate_release_notes: true
+
+      - name: Create Gitee Release
+        env:
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+        run: |
+          if [ -z "$GITEE_TOKEN" ]; then
+            echo "GITEE_TOKEN not configured, skip Gitee Release"
+            exit 0
+          fi
+
+          VERSION=$(node -p "require('./manifest.json').version")
+          TAG="${{ github.ref_name }}"
+          ZIP="dist/codesign-vault-v${VERSION}.zip"
+          OWNER="zhang-yunrui"
+          REPO="codesign-vault"
+
+          RELEASE_ID=$(curl -s \
+            "https://gitee.com/api/v5/repos/${OWNER}/${REPO}/releases/tags/${TAG}?access_token=${GITEE_TOKEN}" \
+            | node -p "JSON.parse(require('fs').readFileSync(0,'utf8')).id || ''" 2>/dev/null || true)
+
+          if [ -z "$RELEASE_ID" ]; then
+            RELEASE_ID=$(curl -s -X POST \
+              "https://gitee.com/api/v5/repos/${OWNER}/${REPO}/releases" \
+              -d "access_token=${GITEE_TOKEN}" \
+              -d "tag_name=${TAG}" \
+              -d "name=${TAG}" \
+              -d "body=Release ${TAG} (synced from GitHub Actions)" \
+              -d "target_commitish=master" \
+              | node -p "JSON.parse(require('fs').readFileSync(0,'utf8')).id")
+          fi
+
+          curl -s -X POST \
+            "https://gitee.com/api/v5/repos/${OWNER}/${REPO}/releases/${RELEASE_ID}/attach_files" \
+            -F "access_token=${GITEE_TOKEN}" \
+            -F "file=@${ZIP}"
+
+          echo "Uploaded ${ZIP} to Gitee release ${RELEASE_ID}"

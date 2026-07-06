@@ -21,7 +21,11 @@ A Chrome extension for product and design teams: save Tencent [CoDesign](https:/
 
 For regular users—no need to clone the repository.
 
-1. Go to [GitHub Releases](https://github.com/Salvatore-chen/codesign-vault/releases) and download the latest `codesign-vault-v1.6.0.zip`
+1. 在 Releases 下载最新版（**国内推荐 Gitee**）：
+   - [Gitee Releases](https://gitee.com/zhang-yunrui/codesign-vault/releases) (China)
+   - [GitHub Releases](https://github.com/Salvatore-chen/codesign-vault/releases) (Global)
+
+   File: `codesign-vault-v1.6.0.zip`
 2. **Extract** the zip to a permanent folder, e.g. `D:\Tools\codesign-vault\`
 3. Open Chrome and go to `chrome://extensions/`
 4. Enable **Developer mode** (top right)
@@ -46,7 +50,7 @@ For developers or anyone who wants to modify the code.
 
 ### Updating
 
-1. Download the new release zip from GitHub and extract it (overwrite the old folder, or extract to a new folder)
+1. Download the new release zip from [Gitee Releases](https://gitee.com/zhang-yunrui/codesign-vault/releases) or [GitHub Releases](https://github.com/Salvatore-chen/codesign-vault/releases) and extract it
 2. Open `chrome://extensions/`, find CoDesign Vault, and click **Reload** (if you changed folders, remove the old extension first, then load the new one)
 
 ## Usage

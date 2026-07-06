@@ -21,7 +21,11 @@
 
 适合普通用户，无需克隆源码。
 
-1. 打开 [GitHub Releases](https://github.com/Salvatore-chen/codesign-vault/releases)，下载最新版 `codesign-vault-v1.6.0.zip`
+1. 下载最新版安装包（**国内用户推荐 Gitee**）：
+   - [Gitee Releases](https://gitee.com/zhang-yunrui/codesign-vault/releases)（国内）
+   - [GitHub Releases](https://github.com/Salvatore-chen/codesign-vault/releases)（海外）
+   
+   文件名：`codesign-vault-v1.6.0.zip`
 2. 将 zip **解压到一个固定目录**，例如 `D:\Tools\codesign-vault\`
 3. 打开 Chrome，访问 `chrome://extensions/`
 4. 开启右上角 **开发者模式**
@@ -46,7 +50,7 @@
 
 ### 更新扩展
 
-1. 在 Releases 下载新版本的 zip 并解压（可覆盖原目录，或解压到新目录后重新加载）
+1. 在 [Gitee Releases](https://gitee.com/zhang-yunrui/codesign-vault/releases) 或 [GitHub Releases](https://github.com/Salvatore-chen/codesign-vault/releases) 下载新版本 zip 并解压
 2. 打开 `chrome://extensions/`，找到 CoDesign 原型库，点击 **重新加载**（若更换了目录，需先移除旧扩展再重新加载）
 
 ## 使用说明
