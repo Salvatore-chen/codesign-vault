@@ -111,7 +111,7 @@ function resolvePrototypeFormValues(sources) {
     if (!looksLikeCoDesignShareText(text)) continue;
 
     const parsed = parseCoDesignShareText(text);
-    if (!parsed?.url || !parsed?.password) continue;
+    if (!parsed?.url) continue;
 
     if (!name) name = parsed.name;
     if (!url) url = parsed.url;

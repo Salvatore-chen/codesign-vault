@@ -12,19 +12,28 @@
     "message": "CoDesign 原型库 - 管理原型"
   },
   "optionsHeaderDesc": {
-    "message": "集中管理 CoDesign 原型分享链接，打开页面时自动应用访问密码，无需每次手动输入。"
+    "message": "按项目组织 CoDesign 原型分享链接，打开页面时自动应用访问密码，无需每次手动输入。"
   },
   "addPrototype": {
     "message": "添加原型"
   },
+  "addProject": {
+    "message": "新建项目"
+  },
   "savedPrototypes": {
-    "message": "已保存的原型"
+    "message": "已保存的项目 / 原型"
+  },
+  "dragHint": {
+    "message": "可拖拽排序，或将原型拖入 / 拖出项目。"
+  },
+  "dragDropHere": {
+    "message": "拖到此处移入"
   },
   "emptyTitle": {
     "message": "还没有保存任何原型"
   },
   "emptyDesc": {
-    "message": "点击右上角「添加原型」，粘贴 CoDesign 分享文本即可快速导入。"
+    "message": "可先新建项目，再添加原型；也可直接粘贴 CoDesign 分享文本快速导入。"
   },
   "footerNote": {
     "message": "数据保存在 Chrome 同步存储中，仅用于访问 codesign.qq.com，不会上传至第三方服务器。"
@@ -47,6 +56,50 @@
   "pastePlaceholder": {
     "message": "【CoDesign 原型分享】产品首页原型 v1\nhttps://codesign.qq.com/s/123456789012345\n密码: XXXX"
   },
+  "belongToProject": {
+    "message": "所属项目"
+  },
+  "ungrouped": {
+    "message": "未分组"
+  },
+  "createProjectInline": {
+    "message": "新建项目…"
+  },
+  "projectName": {
+    "message": "项目名称"
+  },
+  "projectNamePlaceholder": {
+    "message": "例如：某某 App 改版"
+  },
+  "modalAddProjectTitle": {
+    "message": "新建项目"
+  },
+  "modalRenameProjectTitle": {
+    "message": "重命名项目"
+  },
+  "promptNewProject": {
+    "message": "请输入项目名称"
+  },
+  "promptRenameProject": {
+    "message": "请输入新的项目名称"
+  },
+  "renameProject": {
+    "message": "重命名"
+  },
+  "deleteProjectConfirm": {
+    "message": "确定删除项目「$1」吗？其中的原型会移至「未分组」，不会被删除。",
+    "placeholders": {
+      "1": {
+        "content": "$1"
+      }
+    }
+  },
+  "alertProjectNameRequired": {
+    "message": "请输入项目名称。"
+  },
+  "alertProjectNameDuplicate": {
+    "message": "已存在同名项目。"
+  },
   "prototypeName": {
     "message": "原型名称"
   },
@@ -63,7 +116,7 @@
     "message": "访问密码"
   },
   "accessCodePlaceholder": {
-    "message": "请输入访问密码"
+    "message": "选填，无密码可留空"
   },
   "cancel": {
     "message": "取消"
@@ -103,10 +156,10 @@
     "message": "未能识别分享内容，请检查链接格式。"
   },
   "parseNeedPassword": {
-    "message": "已识别链接，请补充访问密码。"
+    "message": "已识别链接，如有密码可补充填写。"
   },
   "alertIncomplete": {
-    "message": "请完整填写名称、链接和密码，或在快速粘贴区域粘贴分享文本。"
+    "message": "请填写名称和链接，或在快速粘贴区域粘贴分享文本。"
   },
   "alertInvalidUrl": {
     "message": "链接格式不正确，请使用 codesign.qq.com 的 /s/ 或 /app/s/ 分享链接。"
@@ -115,7 +168,7 @@
     "message": "该原型链接已经存在，请直接编辑现有条目。"
   },
   "popupSubtitle": {
-    "message": "快速打开已保存的原型"
+    "message": "按项目快速打开原型"
   },
   "managePrototypes": {
     "message": "管理原型"
@@ -136,13 +189,13 @@
     "message": "导入"
   },
   "exportEmpty": {
-    "message": "没有可导出的原型数据。"
+    "message": "没有可导出的数据。"
   },
   "importInvalid": {
     "message": "文件格式无效，请导入 CoDesign Vault 导出的 JSON 文件。"
   },
   "importMergeConfirm": {
-    "message": "检测到 $1 条原型。是否与现有数据合并？（相同链接的原型会被覆盖）\n\n确定 = 合并\n取消 = 进入替换模式"
+    "message": "检测到 $1 条原型。是否与现有数据合并？（相同链接的原型会被覆盖，同名项目会合并）\n\n确定 = 合并\n取消 = 进入替换模式"
   },
   "importReplaceConfirm": {
     "message": "是否用导入的 $1 条原型替换现有全部数据？此操作不可撤销。"

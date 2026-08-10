@@ -12,19 +12,28 @@
     "message": "CoDesign Vault - Manage Prototypes"
   },
   "optionsHeaderDesc": {
-    "message": "Manage CoDesign prototype share links and auto-apply access passwords—no more typing them every time."
+    "message": "Organize CoDesign prototype share links by project and auto-apply access passwords—no more typing them every time."
   },
   "addPrototype": {
     "message": "Add Prototype"
   },
+  "addProject": {
+    "message": "New Project"
+  },
   "savedPrototypes": {
-    "message": "Saved Prototypes"
+    "message": "Projects / Prototypes"
+  },
+  "dragHint": {
+    "message": "Drag to reorder, or move prototypes into / out of projects."
+  },
+  "dragDropHere": {
+    "message": "Drop here to move in"
   },
   "emptyTitle": {
     "message": "No prototypes saved yet"
   },
   "emptyDesc": {
-    "message": "Click \"Add Prototype\" and paste a CoDesign share message to import quickly."
+    "message": "Create a project first, or paste a CoDesign share message to import quickly."
   },
   "footerNote": {
     "message": "Data is stored in Chrome sync storage and used only for codesign.qq.com. Nothing is sent to third-party servers."
@@ -47,6 +56,50 @@
   "pastePlaceholder": {
     "message": "[CoDesign Share] Product Homepage v1\nhttps://codesign.qq.com/s/123456789012345\nPassword: XXXX"
   },
+  "belongToProject": {
+    "message": "Project"
+  },
+  "ungrouped": {
+    "message": "Ungrouped"
+  },
+  "createProjectInline": {
+    "message": "New project…"
+  },
+  "projectName": {
+    "message": "Project Name"
+  },
+  "projectNamePlaceholder": {
+    "message": "e.g. App Redesign"
+  },
+  "modalAddProjectTitle": {
+    "message": "New Project"
+  },
+  "modalRenameProjectTitle": {
+    "message": "Rename Project"
+  },
+  "promptNewProject": {
+    "message": "Enter a project name"
+  },
+  "promptRenameProject": {
+    "message": "Enter a new project name"
+  },
+  "renameProject": {
+    "message": "Rename"
+  },
+  "deleteProjectConfirm": {
+    "message": "Delete project \"$1\"? Prototypes inside will move to Ungrouped and will not be deleted.",
+    "placeholders": {
+      "1": {
+        "content": "$1"
+      }
+    }
+  },
+  "alertProjectNameRequired": {
+    "message": "Please enter a project name."
+  },
+  "alertProjectNameDuplicate": {
+    "message": "A project with this name already exists."
+  },
   "prototypeName": {
     "message": "Prototype Name"
   },
@@ -63,7 +116,7 @@
     "message": "Access Password"
   },
   "accessCodePlaceholder": {
-    "message": "Enter access password"
+    "message": "Optional — leave blank if none"
   },
   "cancel": {
     "message": "Cancel"
@@ -103,10 +156,10 @@
     "message": "Could not parse share content. Please check the link format."
   },
   "parseNeedPassword": {
-    "message": "Link recognized. Please enter the access password."
+    "message": "Link recognized. Add a password if needed."
   },
   "alertIncomplete": {
-    "message": "Please fill in name, link, and password, or paste a share message in Quick Paste."
+    "message": "Please fill in name and link, or paste a share message in Quick Paste."
   },
   "alertInvalidUrl": {
     "message": "Invalid link. Use a codesign.qq.com /s/ or /app/s/ share URL."
@@ -115,7 +168,7 @@
     "message": "This prototype link already exists. Edit the existing entry instead."
   },
   "popupSubtitle": {
-    "message": "Quickly open saved prototypes"
+    "message": "Open prototypes by project"
   },
   "managePrototypes": {
     "message": "Manage Prototypes"
@@ -136,13 +189,13 @@
     "message": "Import"
   },
   "exportEmpty": {
-    "message": "No prototypes to export."
+    "message": "No data to export."
   },
   "importInvalid": {
     "message": "Invalid file. Please import a JSON file exported from CoDesign Vault."
   },
   "importMergeConfirm": {
-    "message": "Found $1 prototype(s). Merge with existing data? (Duplicates by link will be overwritten)\n\nOK = Merge\nCancel = Replace mode"
+    "message": "Found $1 prototype(s). Merge with existing data? (Duplicates by link will be overwritten; projects with the same name will be merged)\n\nOK = Merge\nCancel = Replace mode"
   },
   "importReplaceConfirm": {
     "message": "Replace all existing data with $1 imported prototype(s)? This cannot be undone."

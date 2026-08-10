@@ -13,7 +13,10 @@
           <h1 data-i18n="extName">CoDesign Vault</h1>
           <p data-i18n="optionsHeaderDesc"></p>
         </div>
-        <button type="button" id="addBtn" class="primary-btn" data-i18n="addPrototype"></button>
+        <div class="page-header-actions">
+          <button type="button" id="addProjectBtn" class="ghost-btn" data-i18n="addProject"></button>
+          <button type="button" id="addBtn" class="primary-btn" data-i18n="addPrototype"></button>
+        </div>
       </header>
 
       <section class="card">
@@ -28,15 +31,19 @@
             <input type="file" id="importFile" accept=".json,application/json" class="hidden" />
           </div>
         </div>
+        <p class="drag-hint" data-i18n="dragHint"></p>
 
         <div id="savedEmpty" class="empty-state">
           <div class="empty-icon">📋</div>
           <p class="empty-title" data-i18n="emptyTitle"></p>
           <p class="empty-desc" data-i18n="emptyDesc"></p>
-          <button type="button" id="emptyAddBtn" class="primary-btn" data-i18n="addPrototype"></button>
+          <div class="empty-actions">
+            <button type="button" id="emptyAddProjectBtn" class="ghost-btn" data-i18n="addProject"></button>
+            <button type="button" id="emptyAddBtn" class="primary-btn" data-i18n="addPrototype"></button>
+          </div>
         </div>
 
-        <ul id="savedList" class="saved-list hidden"></ul>
+        <div id="savedList" class="saved-list hidden"></div>
       </section>
 
       <footer class="page-footer">
@@ -69,6 +76,14 @@
               data-i18n-placeholder="pastePlaceholder"
             ></textarea>
             <p id="parseStatus" class="parse-status hidden"></p>
+          </div>
+
+          <div class="field-group">
+            <label for="projectSelect" data-i18n="belongToProject"></label>
+            <div class="field-row">
+              <select id="projectSelect"></select>
+              <button type="button" id="createProjectInlineBtn" class="ghost-btn" data-i18n="createProjectInline"></button>
+            </div>
           </div>
 
           <div class="field-group">
@@ -113,6 +128,37 @@
           <footer class="modal-footer">
             <button type="button" class="ghost-btn" data-close-modal data-i18n="cancel"></button>
             <button type="submit" class="primary-btn" id="submitBtn" data-i18n="save"></button>
+          </footer>
+        </form>
+      </div>
+    </div>
+
+    <div id="projectModal" class="modal project-modal hidden" aria-hidden="true">
+      <div class="modal-backdrop" data-close-project-modal></div>
+      <div class="modal-dialog project-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="projectModalTitle">
+        <header class="modal-header">
+          <h2 id="projectModalTitle" data-i18n="modalAddProjectTitle"></h2>
+          <button type="button" class="modal-close" data-close-project-modal data-i18n-aria="closeAria">×</button>
+        </header>
+
+        <form id="projectForm" class="modal-body" novalidate autocomplete="off">
+          <div class="field-group">
+            <label for="projectNameInput" data-i18n="projectName"></label>
+            <input
+              id="projectNameInput"
+              type="text"
+              autocomplete="off"
+              autocapitalize="off"
+              autocorrect="off"
+              spellcheck="false"
+              data-i18n-placeholder="projectNamePlaceholder"
+            />
+            <p id="projectFormError" class="field-error hidden"></p>
+          </div>
+
+          <footer class="modal-footer">
+            <button type="button" class="ghost-btn" data-close-project-modal data-i18n="cancel"></button>
+            <button type="submit" class="primary-btn" id="projectSubmitBtn" data-i18n="save"></button>
           </footer>
         </form>
       </div>

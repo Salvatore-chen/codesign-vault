@@ -1,23 +1,63 @@
-const EXPORT_VERSION = 1;
+const EXPORT_VERSION = 2;
 const EXPORT_APP = "codesign-vault";
 
 /**
+ * @param {import('./storage').Project[]} projects
  * @param {import('./storage').Prototype[]} prototypes
  */
-function buildExportPayload(prototypes) {
+function buildExportPayload(projects, prototypes) {
+  const projectIds = new Set(projects.map((item) => item.id));
+
   return {
     version: EXPORT_VERSION,
     app: EXPORT_APP,
     exportedAt: new Date().toISOString(),
-    prototypes: prototypes.map(normalizePrototype)
+    projects: projects
+      .map(normalizeProject)
+      .filter(Boolean)
+      .sort(bySortOrder),
+    prototypes: prototypes
+      .map((item) =>
+        normalizePrototype(item, {
+          validProjectIds: projectIds
+        })
+      )
+      .filter(Boolean)
+      .sort(bySortOrder)
   };
 }
 
 /**
  * @param {unknown} item
+ * @returns {import('./storage').Project | null}
+ */
+function normalizeProject(item) {
+  if (!item || typeof item !== "object") return null;
+
+  const record = /** @type {Record<string, unknown>} */ (item);
+  const name = String(record.name || "").trim();
+  if (!name) return null;
+
+  const createdAt = Number(record.createdAt) || Date.now();
+  const sortOrder =
+    typeof record.sortOrder === "number" && Number.isFinite(record.sortOrder)
+      ? record.sortOrder
+      : createdAt;
+
+  return {
+    id: String(record.id || generateId()),
+    name,
+    createdAt,
+    sortOrder
+  };
+}
+
+/**
+ * @param {unknown} item
+ * @param {{ validProjectIds?: Set<string> }} [options]
  * @returns {import('./storage').Prototype | null}
  */
-function normalizePrototype(item) {
+function normalizePrototype(item, options = {}) {
   if (!item || typeof item !== "object") return null;
 
   const record = /** @type {Record<string, unknown>} */ (item);
@@ -26,35 +66,72 @@ function normalizePrototype(item) {
   const password = String(record.password || "").trim();
   const prototypeId = extractPrototypeId(url);
 
-  if (!name || !url || !password || !prototypeId) return null;
+  if (!name || !url || !prototypeId) return null;
+
+  let projectId = record.projectId ? String(record.projectId) : null;
+  if (projectId && options.validProjectIds && !options.validProjectIds.has(projectId)) {
+    projectId = null;
+  }
+
+  const createdAt = Number(record.createdAt) || Date.now();
+  const sortOrder =
+    typeof record.sortOrder === "number" && Number.isFinite(record.sortOrder)
+      ? record.sortOrder
+      : createdAt;
 
   return {
     id: String(record.id || generateId()),
     name,
     url,
     password,
-    createdAt: Number(record.createdAt) || Date.now()
+    createdAt,
+    projectId,
+    sortOrder
   };
 }
 
 /**
  * @param {unknown} data
- * @returns {import('./storage').Prototype[]}
+ * @returns {{ projects: import('./storage').Project[], prototypes: import('./storage').Prototype[] }}
  */
 function parseImportData(data) {
-  let list = [];
+  let projectList = [];
+  let prototypeList = [];
 
   if (Array.isArray(data)) {
-    list = data;
+    prototypeList = data;
   } else if (data && typeof data === "object") {
     const record = /** @type {Record<string, unknown>} */ (data);
+    if (Array.isArray(record.projects)) {
+      projectList = record.projects;
+    }
     if (Array.isArray(record.prototypes)) {
-      list = record.prototypes;
+      prototypeList = record.prototypes;
     }
   }
 
-  const normalized = list.map(normalizePrototype).filter(Boolean);
-  return dedupeByPrototypeId(normalized);
+  const projects = reindexSortOrders(
+    dedupeProjectsById(projectList.map(normalizeProject).filter(Boolean)).sort(bySortOrder)
+  );
+  const validProjectIds = new Set(projects.map((item) => item.id));
+  const prototypes = reindexSortOrders(
+    dedupeByPrototypeId(
+      prototypeList
+        .map((item) => normalizePrototype(item, { validProjectIds }))
+        .filter(Boolean)
+    ).sort(bySortOrder)
+  );
+
+  return { projects, prototypes };
+}
+
+/** @param {import('./storage').Project[]} projects */
+function dedupeProjectsById(projects) {
+  const map = new Map();
+  for (const item of projects) {
+    map.set(item.id, item);
+  }
+  return [...map.values()];
 }
 
 /** @param {import('./storage').Prototype[]} prototypes */
@@ -70,10 +147,47 @@ function dedupeByPrototypeId(prototypes) {
 }
 
 /**
+ * @param {import('./storage').Project[]} existing
+ * @param {import('./storage').Project[]} imported
+ * @returns {{ projects: import('./storage').Project[], idMap: Map<string, string> }}
+ */
+function mergeProjects(existing, imported) {
+  const projects = [...existing].sort(bySortOrder);
+  const byName = new Map(existing.map((item) => [item.name.toLowerCase(), item]));
+  /** @type {Map<string, string>} */
+  const idMap = new Map();
+  let cursor = nextSortOrder(projects);
+
+  for (const item of imported.sort(bySortOrder)) {
+    const matched = byName.get(item.name.toLowerCase());
+    if (matched) {
+      idMap.set(item.id, matched.id);
+      continue;
+    }
+
+    const next = {
+      ...item,
+      id: item.id || generateId(),
+      createdAt: item.createdAt || Date.now(),
+      sortOrder: cursor++
+    };
+    projects.push(next);
+    byName.set(next.name.toLowerCase(), next);
+    idMap.set(item.id, next.id);
+  }
+
+  return {
+    projects: reindexSortOrders(projects.sort(bySortOrder)),
+    idMap
+  };
+}
+
+/**
  * @param {import('./storage').Prototype[]} existing
  * @param {import('./storage').Prototype[]} imported
+ * @param {Map<string, string>} [projectIdMap]
  */
-function mergePrototypes(existing, imported) {
+function mergePrototypes(existing, imported, projectIdMap = new Map()) {
   const map = new Map();
 
   for (const item of existing) {
@@ -81,26 +195,45 @@ function mergePrototypes(existing, imported) {
     if (prototypeId) map.set(prototypeId, item);
   }
 
-  for (const item of imported) {
+  let cursor = nextSortOrder(existing);
+
+  for (const item of imported.sort(bySortOrder)) {
     const prototypeId = extractPrototypeId(item.url);
     if (!prototypeId) continue;
 
     const prev = map.get(prototypeId);
-    map.set(prototypeId, {
-      ...item,
-      id: prev?.id || item.id || generateId(),
-      createdAt: prev?.createdAt || item.createdAt || Date.now()
-    });
+    const mappedProjectId = item.projectId
+      ? projectIdMap.get(item.projectId) || item.projectId
+      : null;
+
+    if (prev) {
+      map.set(prototypeId, {
+        ...item,
+        id: prev.id,
+        createdAt: prev.createdAt,
+        projectId: mappedProjectId,
+        sortOrder: prev.sortOrder
+      });
+    } else {
+      map.set(prototypeId, {
+        ...item,
+        id: item.id || generateId(),
+        createdAt: item.createdAt || Date.now(),
+        projectId: mappedProjectId,
+        sortOrder: cursor++
+      });
+    }
   }
 
-  return [...map.values()].sort((a, b) => b.createdAt - a.createdAt);
+  return reindexSortOrders([...map.values()].sort(bySortOrder));
 }
 
 /**
+ * @param {import('./storage').Project[]} projects
  * @param {import('./storage').Prototype[]} prototypes
  */
-function downloadExportFile(prototypes) {
-  const payload = buildExportPayload(prototypes);
+function downloadExportFile(projects, prototypes) {
+  const payload = buildExportPayload(projects, prototypes);
   const json = JSON.stringify(payload, null, 2);
   const blob = new Blob([json], { type: "application/json" });
   const url = URL.createObjectURL(blob);
@@ -114,7 +247,7 @@ function downloadExportFile(prototypes) {
 
 /**
  * @param {File} file
- * @returns {Promise<import('./storage').Prototype[]>}
+ * @returns {Promise<{ projects: import('./storage').Project[], prototypes: import('./storage').Prototype[] }>}
  */
 function readImportFile(file) {
   return new Promise((resolve, reject) => {
@@ -122,12 +255,12 @@ function readImportFile(file) {
     reader.onload = () => {
       try {
         const data = JSON.parse(String(reader.result || ""));
-        const prototypes = parseImportData(data);
-        if (!prototypes.length) {
+        const imported = parseImportData(data);
+        if (!imported.prototypes.length && !imported.projects.length) {
           reject(new Error("empty"));
           return;
         }
-        resolve(prototypes);
+        resolve(imported);
       } catch {
         reject(new Error("invalid"));
       }
