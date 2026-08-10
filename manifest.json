@@ -4,7 +4,7 @@
   "short_name": "__MSG_extShortName__",
   "description": "__MSG_extDescription__",
   "default_locale": "zh_CN",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "permissions": ["storage", "scripting", "tabs", "webNavigation"],
   "host_permissions": ["https://codesign.qq.com/*"],
   "background": {
@@ -31,7 +31,7 @@
   "content_scripts": [
     {
       "matches": ["https://codesign.qq.com/*"],
-      "js": ["content/content.js"],
+      "js": ["shared/parse.js", "content/content.js"],
       "run_at": "document_start"
     }
   ],

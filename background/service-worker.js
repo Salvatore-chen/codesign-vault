@@ -5,48 +5,76 @@ const STORAGE_KEY = "prototypes";
 /** @type {Map<string, string>} */
 const passwordCache = new Map();
 
-async function refreshCache() {
-  const result = await chrome.storage.sync.get(STORAGE_KEY);
-  const prototypes = result[STORAGE_KEY] || [];
+/** @type {Promise<void> | null} */
+let cacheReady = null;
 
-  passwordCache.clear();
-  for (const item of prototypes) {
-    const prototypeId = extractPrototypeId(item.url);
-    if (prototypeId && item.password) {
-      passwordCache.set(prototypeId, item.password);
+function refreshCache() {
+  cacheReady = (async () => {
+    const result = await chrome.storage.sync.get(STORAGE_KEY);
+    const prototypes = result[STORAGE_KEY] || [];
+
+    passwordCache.clear();
+    for (const item of prototypes) {
+      const prototypeId = extractPrototypeId(item.url);
+      if (prototypeId && item.password) {
+        passwordCache.set(prototypeId, item.password);
+      }
     }
-  }
+  })();
+
+  return cacheReady;
 }
 
-async function ensureCache() {
-  if (passwordCache.size === 0) {
-    await refreshCache();
-  }
+function ensureCache() {
+  if (!cacheReady) return refreshCache();
+  return cacheReady;
 }
 
-async function injectForUrl(tabId, url) {
-  if (!tabId || !url?.startsWith("https://codesign.qq.com/")) return;
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * @param {number} tabId
+ * @param {string} url
+ * @param {{ retries?: number }} [options]
+ */
+async function injectForUrl(tabId, url, options = {}) {
+  if (!tabId || !url?.startsWith("https://codesign.qq.com/")) return false;
 
   const prototypeId = extractPrototypeId(url);
-  if (!prototypeId) return;
+  if (!prototypeId) return false;
 
   await ensureCache();
   const password = passwordCache.get(prototypeId);
-  if (!password) return;
+  if (!password) return false;
 
-  try {
-    await chrome.scripting.executeScript({
-      target: { tabId },
-      injectImmediately: true,
-      world: "MAIN",
-      func: (id, pwd) => {
-        localStorage.setItem(`secret_${id}`, pwd);
-      },
-      args: [prototypeId, password]
-    });
-  } catch {
-    // Navigation may not be ready yet.
+  const retries = options.retries ?? 6;
+
+  for (let attempt = 0; attempt < retries; attempt++) {
+    if (attempt > 0) await sleep(16 * attempt);
+
+    try {
+      await chrome.scripting.executeScript({
+        target: { tabId },
+        injectImmediately: true,
+        world: "MAIN",
+        func: (id, pwd) => {
+          try {
+            localStorage.setItem(`secret_${id}`, pwd);
+          } catch {
+            // Ignore storage write failures during early navigation.
+          }
+        },
+        args: [prototypeId, password]
+      });
+      return true;
+    } catch {
+      // Document may not be ready yet; retry.
+    }
   }
+
+  return false;
 }
 
 async function syncOpenTabs() {
@@ -62,6 +90,10 @@ chrome.runtime.onInstalled.addListener(async () => {
   await syncOpenTabs();
 });
 
+chrome.runtime.onStartup.addListener(() => {
+  refreshCache();
+});
+
 chrome.storage.onChanged.addListener(async (changes, area) => {
   if (area === "sync" && changes[STORAGE_KEY]) {
     await refreshCache();
@@ -71,11 +103,19 @@ chrome.storage.onChanged.addListener(async (changes, area) => {
 
 chrome.webNavigation.onCommitted.addListener((details) => {
   if (details.frameId !== 0) return;
+  if (!details.url?.startsWith("https://codesign.qq.com/")) return;
   injectForUrl(details.tabId, details.url);
+});
+
+chrome.webNavigation.onDOMContentLoaded.addListener((details) => {
+  if (details.frameId !== 0) return;
+  if (!details.url?.startsWith("https://codesign.qq.com/")) return;
+  injectForUrl(details.tabId, details.url, { retries: 2 });
 });
 
 chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
   if (details.frameId !== 0) return;
+  if (!details.url?.startsWith("https://codesign.qq.com/")) return;
   injectForUrl(details.tabId, details.url);
 });
 
@@ -86,7 +126,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (!tabId || !url) return;
 
     injectForUrl(tabId, url)
-      .then(() => sendResponse({ ok: true }))
+      .then((ok) => sendResponse({ ok }))
       .catch(() => sendResponse({ ok: false }));
     return true;
   }
@@ -95,15 +135,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     const url = message.url;
     if (!url) return;
 
-    chrome.tabs
-      .create({ url })
-      .then((tab) => {
-        if (tab.id) {
-          injectForUrl(tab.id, url);
-        }
-        sendResponse({ ok: true, tabId: tab.id });
-      })
-      .catch(() => sendResponse({ ok: false }));
+    (async () => {
+      await refreshCache();
+      const tab = await chrome.tabs.create({ url });
+      if (tab.id) {
+        // Immediate attempts often fail before commit; retries cover early load.
+        injectForUrl(tab.id, url);
+      }
+      sendResponse({ ok: true, tabId: tab.id });
+    })().catch(() => sendResponse({ ok: false }));
 
     return true;
   }
